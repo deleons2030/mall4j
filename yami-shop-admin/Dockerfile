@@ -11,4 +11,4 @@ ADD ./yami-shop-admin/target/yami-shop-admin-0.0.1-SNAPSHOT.jar ./
 
 EXPOSE 8085
 
-CMD java -jar -Xms512m -Xmx512m -Xss256k -XX:SurvivorRatio=8 -Dspring.profiles.active=docker yami-shop-admin-0.0.1-SNAPSHOT.jar
+CMD java -Xms512m -Xmx512m -Xss256k -XX:SurvivorRatio=8 -Dspring.profiles.active=docker -jar yami-shop-admin-0.0.1-SNAPSHOT.jar
