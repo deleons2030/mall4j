@@ -12,7 +12,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./mall4j-mysql:/var/lib/mysql
+      - mall4j-mysql8-data:/var/lib/mysql
     command: --lower_case_table_names=1
 
   mall4j-redis:
@@ -31,6 +31,9 @@ services:
     image: mall4j-admin
     ports:
       - 8085:8085
+    environment:
+      REDIS_HOST: mall4j-redis
+      REDIS_PORT: 6379
     depends_on:
       - mall4j-redis
       - mall4j-mysql
@@ -47,9 +50,26 @@ services:
     image: mall4j-api
     ports:
       - 8086:8086
+    environment:
+      REDIS_HOST: mall4j-redis
+      REDIS_PORT: 6379
     depends_on:
       - mall4j-redis
       - mall4j-mysql
     links:
       - "mall4j-redis"
       - "mall4j-mysql"
+
+  mall4j-nginx:
+    image: nginx:1.20.1
+    restart: always
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - mall4j-admin
+      - mall4j-api
+
+volumes:
+  mall4j-mysql8-data:
